@@ -32,7 +32,7 @@ struct Redirector_t
 
     void Add(const char* m_OriginalFileName, std::string m_NewFileName)
     {
-        Map[UFG::Hash32(m_OriginalFileName)] = m_NewFileName;
+        Map[UFG::HashUpper32(m_OriginalFileName)] = m_NewFileName;
     }
 
     void Add(std::string m_FileName)
@@ -67,7 +67,7 @@ struct Redirector_t
 
     const char* Get(const char* m_FileName)
     {
-        uint32_t m_Hash = UFG::Hash32(m_FileName);
+        uint32_t m_Hash = UFG::HashUpper32(m_FileName);
         auto m_It = Map.find(m_Hash);
         if (m_It == Map.end())
             return nullptr;
