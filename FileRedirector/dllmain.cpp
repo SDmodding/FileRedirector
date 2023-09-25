@@ -197,6 +197,11 @@ namespace Hooks
 
 DWORD __stdcall MainThread(void* m_Reserved)
 {
+    std::string m_CurrentDirectory(MAX_PATH, '\0');
+    GetModuleFileNameA(GetModuleHandleA(0), &m_CurrentDirectory[0], MAX_PATH);
+    m_CurrentDirectory = m_CurrentDirectory.substr(0, m_CurrentDirectory.find_last_of("/\\"));
+    SetCurrentDirectoryA(&m_CurrentDirectory[0]);
+
     CreateDirectoryA(REDIRECTOR_DIR, 0);
 
     Redirector.Itter(REDIRECTOR_DIR);
