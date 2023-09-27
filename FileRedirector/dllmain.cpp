@@ -195,7 +195,7 @@ namespace Hooks
     }
 }
 
-DWORD __stdcall MainThread(void* m_Reserved)
+void Initialize()
 {
     std::string m_CurrentDirectory(MAX_PATH, '\0');
     GetModuleFileNameA(GetModuleHandleA(0), &m_CurrentDirectory[0], MAX_PATH);
@@ -224,18 +224,12 @@ DWORD __stdcall MainThread(void* m_Reserved)
     MH_AddHook(UFG_RVA(0x22C7F0), Hooks::StreamFileWrapper::ReadEntireFile,         (void**)&Hooks::StreamFileWrapper::m_oReadEntireFile);
     MH_AddHook(UFG_RVA(0x22C9C0), Hooks::StreamFileWrapper::ReadEntireFileAsync,    (void**)&Hooks::StreamFileWrapper::m_oReadEntireFileAsync);
     MH_AddHook(UFG_RVA(0x22C360), Hooks::DataStreamer::QueueStream,                 (void**)&Hooks::DataStreamer::m_oQueueStream);
-    
-    return 0;
 }
 
 int __stdcall DllMain(HMODULE m_Module, DWORD m_Reason, void* m_Reserved)
 {
     if (m_Reason == DLL_PROCESS_ATTACH)
-    {
-        HANDLE m_Thread = CreateThread(0, 0, MainThread, m_Module, 0, 0);
-        if (m_Thread && m_Thread != INVALID_HANDLE_VALUE)
-            CloseHandle(m_Thread);
-    }
+        Initialize();
 
     return 1;
 }
